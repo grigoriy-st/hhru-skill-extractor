@@ -1,0 +1,83 @@
+{
+    "Основы Linux": [
+        "bash",
+        "shell",
+        "файловая система Linux",
+        "управление пакетами (apt/yum/dnf)",
+        "процессы и службы",
+        "разрешения (chmod/chown)"
+    ],
+    "Сетевые технологии": [
+        "TCP/IP",
+        "DNS",
+        "DHCP",
+        "Firewall (iptables/nftables)",
+        "VPN (OpenVPN/WireGuard)",
+        "SSH",
+        "HTTP/HTTPS"
+    ],
+    "Виртуализация и контейнеризация": [
+        "Docker",
+        "Kubernetes",
+        "LXC/LXD",
+        "KVM",
+        "QEMU",
+        "Podman",
+        "OpenVZ"
+    ],
+    "Мониторинг и логи": [
+        "Zabbix",
+        "Prometheus",
+        "Grafana",
+        "ELK Stack (Elasticsearch, Logstash, Kibana)",
+        "Nagios",
+        "syslog",
+        "journalctl"
+    ],
+    "Автоматизация": [
+        "Ansible",
+        "Terraform",
+        "Puppet",
+        "Chef",
+        "Python-скрипты",
+        "Bash-скрипты"
+    ],
+    "Резервное копирование": [
+        "rsync",
+        "tar",
+        "BorgBackup",
+        "Duplicity",
+        "Rclone",
+        "LVM-снапшоты"
+    ],
+    "Безопасность": [
+        "SELinux/AppArmor",
+        "Fail2Ban",
+        "Auditd",
+        "Let's Encrypt",
+        "ClamAV",
+        "шифрование (GPG, LUKS)"
+    ],
+    "Веб-серверы и БД": [
+        "Nginx",
+        "Apache",
+        "PostgreSQL",
+        "MySQL/MariaDB",
+        "Redis",
+        "MongoDB"
+    ],
+    "Облачные технологии": [
+        "AWS",
+        "Google Cloud",
+        "Azure",
+        "OpenStack",
+        "Proxmox VE"
+    ],
+    "CI/CD": [
+        "GitLab CI/CD",
+        "Jenkins",
+        "GitHub Actions",
+        "ArgoCD",
+        "Drone CI"
+    ]
+}

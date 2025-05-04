@@ -3,6 +3,7 @@ import json
 import csv
 import time
 from collections import defaultdict
+from pprint import pprint
 
 
 def load_requirements(vacancy_name):
@@ -16,28 +17,38 @@ def load_requirements(vacancy_name):
     return keywords_list
 
 
-def fetch_vacancies(vacancy_name):
+def fetch_vacancies(vacancy_name, vacancy_count=False):
     base_url = 'https://api.hh.ru/vacancies'
     headers = {'User-Agent': 'Mozilla/5.0'}
     page = 0
     vacancies = []
+
     while True:
         params = {
             'text': vacancy_name,
-            'area': 113,
             'per_page': 50,
             'page': page
         }
         response = requests.get(base_url, params=params, headers=headers)
+
         if response.status_code != 200:
             break
+
         data = response.json()
         vacancies.extend(data['items'])
+
+        # Прерываем цикл, если достигли нужного количества или конца страниц
+        if vacancy_count and len(vacancies) >= vacancy_count:
+            vacancies = vacancies[:vacancy_count]  # Отсекаем лишние
+            break
+
         if page >= data['pages'] - 1:
             break
+
         page += 1
         time.sleep(0.5)
-    return vacancies
+
+    return vacancies  # Возвращаем результат в любом случае
 
 
 def get_vacancy_details(vacancy_id):
@@ -66,14 +77,33 @@ def count_keywords(text, keywords_list):
     return found
 
 
+def get_all_vacancy_count(query_string) -> int:
+    """ Возращает общее кол-во вакансий по запросу. """
+    url = f"https://api.hh.ru/vacancies?text={query_string}"
+    response = requests.get(url).json()
+
+    total_vacancies = response["found"]
+    return total_vacancies
+
+
 def main():
     vacancy_name = input("Введите название вакансии: ")
+    total_vac_count = get_all_vacancy_count(vacancy_name)
+
+    print(
+        f'Общее количество вакансий по запросу {vacancy_name}: ' +
+        f'{total_vac_count}'
+    )
+    vac_count = input("Сколько вакансий вы хотите обработать?[all]: ")
+    vac_count = False if vac_count.isalpha() else int(vac_count)
+
     keywords_list = load_requirements(vacancy_name)
-    vacancies = fetch_vacancies(vacancy_name)
+    vacancies = fetch_vacancies(vacancy_name, vac_count)
     counts = defaultdict(int)
     total = 0
 
-    for vacancy in vacancies:
+    # pprint(vacancies)
+    for vacancy in vacancies[:vac_count - 1]:
         vacancy_id = vacancy['id']
         details = get_vacancy_details(vacancy_id)
         if not details:
