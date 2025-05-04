@@ -5,11 +5,16 @@ import time
 from collections import defaultdict
 from pprint import pprint
 
+from typing import Optional, Dict, Any  # Для аннотаций
+
 
 def load_requirements(vacancy_name):
+    """ Выгрузка требований из json-файла. """
+
     filename = f"data/json-requirements/{vacancy_name}.json"
     with open(filename, 'r', encoding='utf-8') as f:
         requirements = json.load(f)
+
     keywords_list = []
     for category, keywords in requirements.items():
         for keyword in keywords:
@@ -17,7 +22,8 @@ def load_requirements(vacancy_name):
     return keywords_list
 
 
-def fetch_vacancies(vacancy_name, vacancy_count=False):
+def fetch_vacancies(vacancy_name, vacancy_count=False) -> list:
+    """ Парсинг всех вакансий. """
     base_url = 'https://api.hh.ru/vacancies'
     headers = {'User-Agent': 'Mozilla/5.0'}
     page = 0
@@ -51,14 +57,17 @@ def fetch_vacancies(vacancy_name, vacancy_count=False):
     return vacancies  # Возвращаем результат в любом случае
 
 
-def get_vacancy_details(vacancy_id):
+def get_vacancy_details(vacancy_id) -> Optional[Dict[str, Any]]:
+    """ Парсинг данных с одной вакансии. """
     url = f'https://api.hh.ru/vacancies/{vacancy_id}'
     headers = {'User-Agent': 'Mozilla/5.0'}
     response = requests.get(url, headers=headers)
     return response.json() if response.status_code == 200 else None
 
 
-def parse_vacancy_details(details):
+def parse_vacancy_details(details) -> str:
+    """ Парсинг текста с одной вакансии. """
+
     text = []
     if 'description' in details:
         text.append(details['description'])
@@ -68,7 +77,9 @@ def parse_vacancy_details(details):
     return ' '.join(text).lower()
 
 
-def count_keywords(text, keywords_list):
+def count_keywords(text, keywords_list) -> set:
+    """ Счётчик требований из вакансии на основе списка ключевых слов. """
+
     found = set()
     text_lower = text.lower()
     for category, keyword in keywords_list:
@@ -123,7 +134,8 @@ def main():
     for category in grouped:
         grouped[category].sort(key=lambda x: -x[1])
 
-    with open(f'data/csv-responces/{vacancy_name}_stats.csv', 'w', newline='', encoding='utf-8') as csvfile:
+    with open(f'data/csv-responces/{vacancy_name}_stats.csv', 'w',
+              newline='', encoding='utf-8') as csvfile:
         writer = csv.writer(csvfile)
         for category, keywords in grouped.items():
             writer.writerow([category])

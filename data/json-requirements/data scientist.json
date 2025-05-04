@@ -1,0 +1,92 @@
+{
+    "core_skills": {
+      "programming": [
+        "Python (Pandas, NumPy)",
+        "R (tidyverse)",
+        "SQL (оконные функции, оптимизация запросов)",
+        "Bash/Command Line"
+      ],
+      "math_and_stats": [
+        "Теория вероятностей",
+        "Статистический анализ (A/B-тесты)",
+        "Линейная алгебра",
+        "Оптимизация"
+      ],
+      "data_processing": [
+        "ETL-процессы",
+        "Feature Engineering",
+        "Работа с пропусками (missing data)",
+        "Обработка временных рядов"
+      ]
+    },
+    "machine_learning": {
+      "supervised": [
+        "Классификация (LogReg, XGBoost, CatBoost)",
+        "Регрессия (Linear, Polynomial, Ridge/Lasso)",
+        "Метрики качества (ROC-AUC, RMSE, Precision-Recall)"
+      ],
+      "unsupervised": [
+        "Кластеризация (k-means, DBSCAN, Hierarchical)",
+        "PCA/t-SNE/UMAP",
+        "Аномалии (Isolation Forest, Autoencoders)"
+      ],
+      "modeling_tools": [
+        "Scikit-learn",
+        "LightGBM/XGBoost",
+        "StatsModels",
+        "H2O.ai"
+      ]
+    },
+    "data_analysis": {
+      "visualization": [
+        "Matplotlib/Seaborn",
+        "Plotly/Dash",
+        "Tableau/Power BI",
+        "EDA (AutoViz, Pandas Profiling)"
+      ],
+      "experiments": [
+        "A/B-тестирование (CUPED, Bootstrap)",
+        "Планирование экспериментов",
+        "Causal Inference (DoWhy)"
+      ],
+      "big_data_tools": [
+        "PySpark",
+        "Dask",
+        "SQL-движки (BigQuery, Redshift, Snowflake)"
+      ]
+    },
+    "ml_production": {
+      "deployment": [
+        "FastAPI/Flask",
+        "MLflow",
+        "Docker",
+        "Airflow/Prefect"
+      ],
+      "cloud_services": [
+        "AWS (S3, SageMaker)",
+        "GCP (Vertex AI, BigQuery)",
+        "Azure ML"
+      ],
+      "monitoring": [
+        "Evidently",
+        "Prometheus/Grafana",
+        "Drift-детекция"
+      ]
+    },
+    "domain_knowledge": [
+      "Понятия из бизнес-аналитики (LTV, Churn, Cohort Analysis)",
+      "Финансы (VaR, Monte Carlo)",
+      "Маркетинг (Customer Segmentation, CLV)"
+    ],
+    "tools": [
+      "Jupyter Notebooks",
+      "Git/GitHub",
+      "DBeaver/DataGrip",
+      "VS Code/PyCharm"
+    ],
+    "soft_skills": [
+      "Коммуникация с бизнесом",
+      "Storytelling с данными",
+      "Управление проектами (Agile)"
+    ]
+  }

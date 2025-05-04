@@ -1,83 +1,83 @@
 {
-    "Основы Linux": [
+    "основы linux": [
         "bash",
         "shell",
-        "файловая система Linux",
+        "файловая система linux",
         "управление пакетами (apt/yum/dnf)",
         "процессы и службы",
         "разрешения (chmod/chown)"
     ],
-    "Сетевые технологии": [
-        "TCP/IP",
-        "DNS",
-        "DHCP",
-        "Firewall (iptables/nftables)",
-        "VPN (OpenVPN/WireGuard)",
-        "SSH",
-        "HTTP/HTTPS"
+    "сетевые технологии": [
+        "tcp/ip",
+        "dns",
+        "dhcp",
+        "firewall (iptables/nftables)",
+        "vpn (openvpn/wireguard)",
+        "ssh",
+        "http/https"
     ],
-    "Виртуализация и контейнеризация": [
-        "Docker",
-        "Kubernetes",
-        "LXC/LXD",
-        "KVM",
-        "QEMU",
-        "Podman",
-        "OpenVZ"
+    "виртуализация и контейнеризация": [
+        "docker",
+        "kubernetes",
+        "lxc/lxd",
+        "kvm",
+        "qemu",
+        "podman",
+        "openvz"
     ],
-    "Мониторинг и логи": [
-        "Zabbix",
-        "Prometheus",
-        "Grafana",
-        "ELK Stack (Elasticsearch, Logstash, Kibana)",
-        "Nagios",
+    "мониторинг и логи": [
+        "zabbix",
+        "prometheus",
+        "grafana",
+        "elk stack (elasticsearch, logstash, kibana)",
+        "nagios",
         "syslog",
         "journalctl"
     ],
-    "Автоматизация": [
-        "Ansible",
-        "Terraform",
-        "Puppet",
-        "Chef",
-        "Python-скрипты",
-        "Bash-скрипты"
+    "автоматизация": [
+        "ansible",
+        "terraform",
+        "puppet",
+        "chef",
+        "python-скрипты",
+        "bash-скрипты"
     ],
-    "Резервное копирование": [
+    "резервное копирование": [
         "rsync",
         "tar",
-        "BorgBackup",
-        "Duplicity",
-        "Rclone",
-        "LVM-снапшоты"
+        "borgbackup",
+        "duplicity",
+        "rclone",
+        "lvm-снапшоты"
     ],
-    "Безопасность": [
-        "SELinux/AppArmor",
-        "Fail2Ban",
-        "Auditd",
-        "Let's Encrypt",
-        "ClamAV",
-        "шифрование (GPG, LUKS)"
+    "безопасность": [
+        "selinux/apparmor",
+        "fail2ban",
+        "auditd",
+        "let's encrypt",
+        "clamav",
+        "шифрование (gpg, luks)"
     ],
-    "Веб-серверы и БД": [
-        "Nginx",
-        "Apache",
-        "PostgreSQL",
-        "MySQL/MariaDB",
-        "Redis",
-        "MongoDB"
+    "веб-серверы и бд": [
+        "nginx",
+        "apache",
+        "postgresql",
+        "mysql/mariadb",
+        "redis",
+        "mongodb"
     ],
-    "Облачные технологии": [
-        "AWS",
-        "Google Cloud",
-        "Azure",
-        "OpenStack",
-        "Proxmox VE"
+    "облачные технологии": [
+        "aws",
+        "google cloud",
+        "azure",
+        "openstack",
+        "proxmox ve"
     ],
-    "CI/CD": [
-        "GitLab CI/CD",
-        "Jenkins",
-        "GitHub Actions",
-        "ArgoCD",
-        "Drone CI"
+    "ci/cd": [
+        "gitlab ci/cd",
+        "jenkins",
+        "github actions",
+        "argocd",
+        "drone ci"
     ]
 }

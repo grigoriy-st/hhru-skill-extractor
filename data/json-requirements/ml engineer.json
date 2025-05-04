@@ -1,0 +1,99 @@
+{
+    "основные технологии": {
+        "языки программирования": [
+            "Python (основной)",
+            "R (для статистического анализа)",
+            "SQL (для работы с данными)",
+            "C++ (ускорение вычислений)",
+            "Bash (автоматизация)"
+        ],
+        "ML фреймворки": [
+            "PyTorch (включая Lightning)",
+            "TensorFlow/Keras",
+            "Scikit-learn",
+            "XGBoost/LightGBM/CatBoost",
+            "Hugging Face Transformers"
+        ],
+        "обработка данных": [
+            "Pandas/Numpy",
+            "Dask/Ray (распределённая обработка)",
+            "Apache Spark",
+            "Feature Engineering",
+            "Data Versioning (DVC)"
+        ]
+    },
+    "продвинутые навыки": {
+        "направления ML": [
+            "Computer Vision (OpenCV, Albumentations)",
+            "NLP (BERT, GPT, spaCy)",
+            "Time Series Analysis (Prophet, ARIMA)",
+            "Recommender Systems",
+            "Generative AI (Diffusion, GANs)"
+        ],
+        "оптимизация моделей": [
+            "Quantization (TensorRT, ONNX)",
+            "Pruning/Distillation",
+            "ML Compilers (TVM, Glow)",
+            "Edge ML (TFLite, CoreML)",
+            "Benchmarking (MLPerf)"
+        ],
+        "развёртывание (MLOps)": [
+            "Docker/Kubernetes",
+            "FastAPI/Flask",
+            "MLflow/Kubeflow",
+            "Seldon Core/Triton",
+            "A/B-тестирование моделей"
+        ]
+    },
+    "сопутствующие технологии": {
+        "облачные платформы": [
+            "AWS (SageMaker, Bedrock)",
+            "GCP (Vertex AI, TPUs)",
+            "Azure ML",
+            "Databricks",
+            "Hugging Face Inference API"
+        ],
+        "базы данных": [
+            "PostgreSQL (с расширениями pgvector)",
+            "MongoDB",
+            "Redis (кеширование)",
+            "Elasticsearch",
+            "ClickHouse"
+        ],
+        "визуализация": [
+            "Matplotlib/Seaborn",
+            "Plotly/Dash",
+            "Tableau/Power BI",
+            "Weights & Biases",
+            "TensorBoard"
+        ]
+    },
+    "актуальные тренды": [
+        "LLM (Fine-tuning, RAG)",
+        "Multimodal модели (CLIP, Flamingo)",
+        "ML на графах (PyG, DGL)",
+        "AutoML (H2O, AutoGluon)",
+        "Quantum ML (PennyLane)"
+    ],
+    "инструменты": [
+        "Jupyter/Lab",
+        "VSCode/PyCharm",
+        "Git/GitHub/GitLab",
+        "DVC (Data Version Control)",
+        "MLflow (эксперименты)"
+    ],
+    "методологии": [
+        "CRISP-DM",
+        "Agile для ML-проектов",
+        "Feature Store концепции",
+        "Reproducibility (PyTorch Hub, Model Zoo)",
+        "Ethics in AI (Fairness, Bias detection)"
+    ],
+    "математические основы": [
+        "Линейная алгебра",
+        "Теория вероятностей",
+        "Статистика",
+        "Оптимизация (градиентные методы)",
+        "Теория информации"
+    ]
+}

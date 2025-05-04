@@ -1,0 +1,92 @@
+{
+    "основные технологии": {
+        "react": [
+            "функциональные компоненты",
+            "хуки (usestate, useeffect, usecontext)",
+            "react router",
+            "контекст api",
+            "порталы",
+            "error boundaries"
+        ],
+        "state management": [
+            "redux (toolkit)",
+            "mobx",
+            "recoil",
+            "zustand",
+            "react query"
+        ],
+        "стилизация": [
+            "css modules",
+            "styled components",
+            "tailwind css",
+            "sass/scss",
+            "css-in-js (emotion)"
+        ]
+    },
+    "продвинутые навыки": {
+        "оптимизация": [
+            "react.memo",
+            "usememo/usecallback",
+            "lazy loading",
+            "virtualization (react-window)",
+            "performance profiling"
+        ],
+        "тестирование": [
+            "jest",
+            "react testing library",
+            "cypress",
+            "storybook",
+            "snapshot testing"
+        ],
+        "архитектура": [
+            "atomic design",
+            "feature-sliced design",
+            "микросервисный фронтенд",
+            "монорепозитории (nx)"
+        ]
+    },
+    "сопутствующие технологии": {
+        "базовый стек": [
+            "typescript",
+            "javascript (es6+)",
+            "html5",
+            "webpack/vite",
+            "git"
+        ],
+        "backend interaction": [
+            "rest api",
+            "graphql (apollo, relay)",
+            "websockets",
+            "axios/fetch",
+            "jwt-аутентификация"
+        ],
+        "ui libraries": [
+            "material ui",
+            "ant design",
+            "chakra ui",
+            "headless ui",
+            "radix ui"
+        ]
+    },
+    "актуальные тренды": [
+        "server components (next.js)",
+        "react server actions",
+        "react compiler",
+        "react native (для кросс-платформы)",
+        "webassembly с react"
+    ],
+    "инструменты": [
+        "react devtools",
+        "redux devtools",
+        "eslint/prettier",
+        "figma/adobe xd",
+        "docker (для фронтенда)"
+    ],
+    "методологии": [
+        "agile/scrum",
+        "ci/cd для фронтенда",
+        "code review практики",
+        "accessibility (a11y)",
+        "i18n (интернационализация)"
+    ]
+}

@@ -1,0 +1,87 @@
+{
+    "основные технологии": {
+        "языки программирования": [
+            "C (C11/C17)",
+            "C++ (Embedded subset, C++17)",
+            "Rust (для safety-critical систем)",
+            "Ассемблер (ARM, AVR, x86)"
+        ],
+        "микроконтроллеры": [
+            "STM32 (HAL/LL, CubeIDE)",
+            "ESP32/ESP8266",
+            "AVR (Arduino, bare-metal)",
+            "PIC (Microchip)",
+            "RISC-V (SiFive, Kendryte)"
+        ],
+        "реальные ОС (RTOS)": [
+            "FreeRTOS",
+            "Zephyr OS",
+            "RT-Thread",
+            "VxWorks",
+            "QNX"
+        ]
+    },
+    "продвинутые навыки": {
+        "low-level оптимизация": [
+            "Оптимизация памяти (heap/stack анализ)",
+            "Профилирование (perf, Tracealyzer)",
+            "Векторизация (CMSIS-DSP, SIMD)",
+            "Бесперебойная работа (watchdog, brownout)"
+        ],
+        "аппаратные интерфейсы": [
+            "UART/SPI/I2C",
+            "CAN/CAN FD",
+            "USB (Host/Device)",
+            "Ethernet (LWIP)",
+            "Bluetooth/BLE (nRF, ESP)"
+        ],
+        "безопасность": [
+            "Secure Boot (TrustZone)",
+            "OTA-обновления",
+            "Криптография (mbedTLS, WolfSSL)",
+            "Защита от side-channel атак"
+        ]
+    },
+    "сопутствующие технологии": {
+        "инструменты разработки": [
+            "Keil µVision",
+            "IAR Embedded Workbench",
+            "PlatformIO",
+            "OpenOCD",
+            "J-Link/ST-Link"
+        ],
+        "отладка и тестирование": [
+            "Осциллографы/логические анализаторы",
+            "JTAG/SWD",
+            "Unit-тесты (CppUTest, Unity)",
+            "HIL-тестирование"
+        ],
+        "периферия": [
+            "Датчики (IMU, ToF, термопары)",
+            "ЖК-дисплеи (LVGL)",
+            "Моторы (PWM, драйверы)",
+            "Релийные модули"
+        ]
+    },
+    "актуальные тренды": [
+        "Edge AI (TinyML, TensorFlow Lite)",
+        "Rust в embedded (no_std, embassy)",
+        "Energy Harvesting системы",
+        "Wireless (LoRaWAN, Zigbee)",
+        "Автомобильные стандарты (AUTOSAR)"
+    ],
+    "инструменты": [
+        "Wireshark для embedded-трафика",
+        "Logic Analyzer (Saleae)",
+        "CMake для embedded",
+        "Docker для кросс-компиляции",
+        "CI/CD для прошивок (Jenkins, GitLab CI)"
+    ],
+    "методологии": [
+        "ASPICE (для automotive)",
+        "ISO 26262 (Functional Safety)",
+        "DO-178C (авиация)",
+        "Code Review (MISRA C/C++)",
+        "Версионирование прошивок (SemVer)"
+    ]
+}
