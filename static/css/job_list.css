@@ -1,0 +1,27 @@
+div.action {
+    border: 1px solid rgb(0, 0, 0);
+    padding: 10px;
+    border-radius: 30px;
+    margin-top: 30px;
+    width: 80%;
+}
+
+table {
+    width: 100%;
+}
+
+tr {
+    border: 1px solid grey;
+}
+
+th {
+    background-color: rgb(181, 183, 185);
+}
+
+.buttons_block {
+    display: flex;
+    justify-content: space-between;
+    width: 170px;
+    margin-top: 5px;
+}
+

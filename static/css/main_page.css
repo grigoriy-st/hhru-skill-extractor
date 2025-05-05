@@ -1,0 +1,13 @@
+
+main {
+    display: flex;
+    justify-content: space-evenly;
+    width: 40%;
+    margin: auto 0;
+}
+
+.analyzer_img {
+    width: 30%;
+    height: auto;
+    margin: 30px;
+}

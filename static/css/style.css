@@ -1,0 +1,168 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+a {
+    text-decoration: none;
+    color: black;
+}
+
+header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    margin-top: 30px;
+    width: 100%;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    height: 100vh;
+    margin-top: 20px;
+}
+
+nav {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px;
+    width: 400px;
+}
+
+button {
+    display: inline-block;
+    padding: 12px 24px;
+    background: #4285f4;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #3367d6;
+}
+
+#nav_btn {
+    border-radius: 30px;
+    transition-duration: 0.4s;
+    padding: 7px;
+}
+
+.nav_btn_1 {
+    border: 2px solid rgb(5, 198, 127);
+    border-radius: 10px;
+}
+
+.nav_btn_1:hover {
+    background-color: rgb(5, 198, 127);
+    color: white;
+}
+
+.nav_btn_2 {
+    border: 2px solid rgb(0, 150, 199);
+    border-radius: 10px;
+    padding: 3px;
+}
+
+.nav_btn_2:hover {
+    background-color: rgb(0, 150, 199);
+    color: white;
+}
+.nav_btn_3 {
+    border: 2px solid rgb(169, 20, 9);
+    border-radius: 10px;
+    padding: 3px;
+}
+
+.nav_btn_3:hover {
+    background-color: rgb(169, 20, 9);
+    color: white;
+}
+
+.auth_buttons {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 17%;
+}
+
+.second_header {
+    display: flex;
+    justify-content: space-around;
+
+    align-items: center;
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-left: 15vw;
+
+    width: 100%;
+}
+
+.second_header_text {
+    color: grey;
+    margin-top: 30px;
+    margin-left: 15vw;
+}
+
+.success_message {
+    color: green;
+}
+
+.error_message {
+    color: red;
+}
+
+.add_btn {
+    padding: 5px 10px;
+    border-radius: 15px;
+}
+
+input.post_button {
+    border-radius: 15px;
+    margin: 0 auto;
+    margin-top: 50px;
+    border: none;
+    background-color:rgb(6, 76, 255);
+    color: white;
+    
+    width: 100px;
+    height: 30px;
+}
+
+.buttons_block {
+    display: flex;
+    justify-content: space-between;
+    width: 230px;
+    margin-top: 5px;
+}
+
+.btn_for_edit, .btn_for_delete {
+    border-radius: 10px;
+    border-color: rgb(175, 176, 176);
+    height: 30px;
+    width: 80px;
+}
+
+
+.btn_for_edit {
+    background-color: yellow;
+}
+
+.btn_for_delete {
+    color: white;
+    background-color: red;
+}
+

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% for message in messages %}
+<div class="alert alert-warning">{{ message }}</div>
+{% endfor %}
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Surname</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Position</th>
+            <th>Speciality</th>
+            <th>Address</th>
+        </tr>
+    </thead>
+{% for user in users %}
+    <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.surname }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.age }}</td>
+        <td>{{ user.position }}</td>
+        <td>{{ user.speciality }}</td>
+        <td>{{ user.address }}</td>
+    </tr>
+{% endfor %}
+</table>
+
+{% endblock %}

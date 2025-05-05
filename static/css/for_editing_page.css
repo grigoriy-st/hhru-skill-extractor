@@ -1,0 +1,17 @@
+input:not(:last-of-type), select {
+    margin-bottom: 15px;
+}
+
+.editing_form {
+    display: flex;
+    flex-direction: column;
+}
+
+.is_finished_block {
+    display: flex;
+    width: 40%;
+    justify-content: space-between;
+    justify-items: center;
+    align-items: center;
+    margin: 0 auto;
+}

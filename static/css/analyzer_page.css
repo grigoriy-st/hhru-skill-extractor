@@ -1,0 +1,39 @@
+main {
+    justify-content: baseline;
+}
+
+.analyzer-container {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: center;
+}
+
+.analyzer-description {
+    text-align: center;
+}
+
+.vacancy-form {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: center;
+    height: 400px;
+    width: 300px;
+}
+
+.form-input {
+    width: 300px;
+}
+
+.option-group {
+    width: 300px;
+}
+
+/* .analyze-button {
+    margin: 30px;
+} */
+
+.examples {
+    margin-top: 50px;
+}

@@ -1,0 +1,35 @@
+form.form1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    justify-items: center;
+    align-items: center;
+    width: 200px;
+    margin-top: 20px;
+}
+
+.form1 label {
+    display: block;
+    margin-bottom: 5px;
+    padding-top: 10px;
+}
+
+.form1 input {
+    width: 100%;
+}
+
+select#team_leader {
+    width: 100%;
+}
+
+input.post_button {
+    border-radius: 15px;
+    margin-top: 50px;
+    border: none;
+    background-color:rgb(6, 76, 255);
+    color: white;
+    width: 100px;
+    height: 30px;
+}
+
+

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/analyzer_page.css')}}"> 
+{% endblock %}
+
+{% block content %}
+<div class="analyzer-container">
+    <h1 class="analyzer-title">Анализатор вакансий с hh.ru</h1>
+    <p class="analyzer-description">
+        Узнайте, какие навыки наиболее востребованы для вашей профессии.</br>
+        Введите название вакансии и получите детальный анализ требований работодателей.
+    </p>
+
+    <form action="{{ url_for('work_with_ analyzer.get_analyzer_page') }}" method="post" class="vacancy-form">
+        <div class="form-group">
+            <label for="vacancy_query">Вакансия:</label>
+            <input type="text" 
+                   name="vacancy_query" 
+                   class="form-input" 
+                   placeholder="Например: Python разработчик" 
+                   required>
+        </div>
+        
+        <div class="option-group">
+            <label for="region">Регион:</label>
+            <select name="region" id="region" class="form-select">
+                <option value="1">Москва</option>
+                <option value="2">Санкт-Петербург</option>
+                <option value="3">Все регионы</option>
+            </select>
+        </div>
+        
+        <div class="option-group">
+            <label for="count">Количество вакансий:</label>
+            <select name="count" id="count" class="form-select">
+                <option value="50">50</option>
+                <option value="100" selected>100</option>
+                <option value="200">200</option>
+                <option value="all">Все</option>
+            </select>
+        </div>
+
+        <button type="submit" class="analyze-button">Проанализировать</button>
+    </form>
+
+    <div class="examples">
+        <h3>Популярные запросы:</h3>
+        <div class="example-tags">
+            <a href="{{ url_for('work_with_ analyzer.get_analyzer_page') }}?query=Python" class="tag">Python</a>
+            <a href="{{ url_for('work_with_ analyzer.get_analyzer_page') }}?query=Java" class="tag">Java</a>
+            <a href="{{ url_for('work_with_ analyzer.get_analyzer_page') }}?query=Data Scientist" class="tag">Data Scientist</a>
+            <a href="{{ url_for('work_with_ analyzer.get_analyzer_page') }}?query=Frontend" class="tag">Frontend</a>
+            <a href="{{ url_for('work_with_ analyzer.get_analyzer_page') }}?query=DevOps" class="tag">DevOps</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
