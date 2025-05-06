@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/create_requirements_template.css')}}"> 
+<script src="{{ url_for('static', filename='js/upload_requirements.js' ) }}"></script>
+{% endblock %}
+
+{% block content %}
+
+{% if message %}
+    <h2 class="success_message">{{ message[-1] }}</h2>
+{% endif %}
+
+
+<h1>Создание нового шаблона вакансии</h1>
+
+<div class="form-group">
+    <label for="template-upload">Загрузить шаблон:</label>
+    <input type="file" id="template-upload" name="template_file" accept=".json" style="display: none;">
+    <button type="button" id="upload-btn" class="add-btn">Выбрать файл</button>
+    <span id="file-name">Файл не выбран</span>
+</div>
+
+<script src="{{ url_for('static', filename='/js/create_requirements_template.js')}}"></script>
+
+    <form action="{{ url_for('work_with_analyzer.create_requirements_template') }}" method="post">
+        <div class="form-group">
+            <label for="template_name">Название шаблона:</label>
+            <input type="text" id="template_name" name="template_name" required>
+        </div>
+
+        <div id="categories-container">
+            <!-- Категории будут добавляться здесь -->
+        </div>
+
+        <button type="button" id="add-category" class="add-btn">Добавить категорию</button>
+        <button type="submit">Сохранить шаблон</button>
+    </form>
+
+    <script src="{{ url_for('static', filename='js/create_requirements_template.js ')}}"></script>
+
+{% endblock %}

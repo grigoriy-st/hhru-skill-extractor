@@ -56,52 +56,6 @@ def get_main_page():
 
 def main():
     ...
-    # vacancy_name = input("Введите название вакансии: ")
-    # total_vac_count = get_all_vacancy_count(vacancy_name)
-
-    # print(
-    #     f'Общее количество вакансий по запросу {vacancy_name}: ' +
-    #     f'{total_vac_count}'
-    # )
-    # vac_count = input("Сколько вакансий вы хотите обработать?[all]: ")
-    # vac_count = False if vac_count.isalpha() else int(vac_count)
-
-    # keywords_list = load_requirements(vacancy_name)
-    # vacancies = fetch_vacancies(vacancy_name, vac_count)
-    # counts = defaultdict(int)
-    # total = 0
-
-    # # pprint(vacancies)
-    # for vacancy in vacancies[:vac_count - 1]:
-    #     vacancy_id = vacancy['id']
-    #     details = get_vacancy_details(vacancy_id)
-    #     if not details:
-    #         continue
-    #     text = parse_vacancy_details(details)
-    #     found = count_keywords(text, keywords_list)
-    #     for key in found:
-    #         counts[key] += 1
-    #     total += 1
-    #     print(f"Обработано вакансий: {total}", end='\r')
-    #     time.sleep(0.1)
-
-    # grouped = defaultdict(list)
-    # for (category, keyword), count in counts.items():
-    #     grouped[category].append((keyword, count))
-
-    # for category in grouped:
-    #     grouped[category].sort(key=lambda x: -x[1])
-
-    # with open(f'data/csv-responces/{vacancy_name}_stats.csv', 'w',
-    #           newline='', encoding='utf-8') as csvfile:
-    #     writer = csv.writer(csvfile)
-    #     for category, keywords in grouped.items():
-    #         writer.writerow([category])
-    #         for keyword, count in keywords:
-    #             writer.writerow([keyword, count])
-
-    # print(f"\nРезультаты сохранены в data/csv-responces/{vacancy_name}_stats.csv")
-
 @app.route('/users')
 def get_users():
     db_ss = db_session.create_session()
@@ -121,5 +75,5 @@ def unauthorized():
 
 
 if __name__ == '__main__':
-    app.run(port="8080", host="127.0.0.1")
+    app.run(port="8080", host="127.0.0.1", debug=True)
     main()

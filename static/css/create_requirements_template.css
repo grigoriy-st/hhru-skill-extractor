@@ -1,0 +1,22 @@
+main {
+    width: 80%;
+}
+
+form {
+    height: 100px;
+    margin-top: 30px;
+}
+
+#categories-container {
+    margin-top: 15px;
+}
+
+.category-block {
+    /* min-height: 100px; */
+    margin-bottom: 10px;
+}
+
+.form-group {
+    /* height: 80px; */
+    margin-top: 10px;
+}

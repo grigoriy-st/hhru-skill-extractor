@@ -1,0 +1,42 @@
+{
+    "template_name": "Шаблон для программиста",
+    "тестирование": [
+        "тестирование",
+        "unittest",
+        "pytest"
+    ],
+    "виртуализация/контейнеаризация": [
+        "виртуализация",
+        "docker",
+        "kubernetes",
+        "контейнеаризация"
+    ],
+    "основы языка": [
+        "функции",
+        "ооп",
+        "рекурсия",
+        "основы языка python"
+    ],
+    "фреймворки": [
+        "django",
+        "bottle",
+        "cherrypy",
+        "fastapi",
+        "pyramid",
+        "pyqt",
+        "tkinter",
+        "kivy",
+        "pyside"
+    ],
+    "библиотеки": [
+        "pillow",
+        "opencv",
+        "tensorflow",
+        "pandas",
+        "matplotlib",
+        "beautifulsoup",
+        "aiogram",
+        "telebot",
+        "python-telegram-bot"
+    ]
+}

@@ -1,1 +1,49 @@
 <!-- Отображение результатов запроса. -->
+{% extends "base.html" %}
+
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/register_style.css')}}"> 
+{% endblock %}
+
+{% block content %}
+
+{% if message == "The user has been added" %}
+    <h2 class="success_message">{{ message }}</h2>
+
+{% else %}
+    <h2 class="error_message">{{ message }}</h2>
+{% endif %}
+<div class="container">
+    <h1>Результаты анализа: {{ results.vacancy_name }}</h1>
+    <p>Проанализировано вакансий: {{ results.total_vacancies }}</p>
+    
+    <a href="{{ url_for('static', filename='csv-responses/' + results.csv_path.split('/')[-1]) }}" 
+       download class="btn btn-primary">
+        Скачать CSV
+    </a>
+    
+    <div class="results">
+        {% for category, skills in results.results.items() %}
+        <h2>{{ category }}</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Навык</th>
+                    <th>Количество упоминаний</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for skill, count in skills %}
+                <tr>
+                    <td>{{ skill }}</td>
+                    <td>{{ count }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
