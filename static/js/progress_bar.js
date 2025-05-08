@@ -19,6 +19,7 @@ document.querySelector('.vacancy-form').addEventListener('submit', function(e) {
         
         // Когда обработка завершена
         if (data.completed) {
+            console.log("Task is complete!")
             document.getElementById('progress-status').textContent = 'Анализ завершен!';
             // Показываем результаты
             displayResults(data.results);
