@@ -14,8 +14,8 @@ from typing import Optional, Dict, Any  # Для аннотаций
 from flask import (
     Flask, Blueprint,
     request,
-    flash, redirect, render_template, url_for,
-    get_flashed_messages, jsonify, Response, session
+    flash, redirect, render_template, url_for, send_from_directory, stream_with_context,
+    current_app, get_flashed_messages, jsonify, Response, session
 )
 
 from data import db_session
@@ -24,71 +24,168 @@ from models.users import User
 work_with_analyzer_bp = Blueprint('work_with_analyzer', __name__)
 
 
+from flask import Response, stream_with_context, json, request, redirect, url_for, session, render_template
+from collections import defaultdict
+import os
+import csv
+from datetime import datetime
+
 @work_with_analyzer_bp.route('/analyzer', methods=['POST', 'GET'])
 def get_analyzer_page():
-    """Отображение страницы с анализатором."""
-    if request.method == 'POST':
-        form_data = request.form.to_dict()
+    """Обработчик анализа вакансий с поддержкой прогресс-бара"""
+    
+    # Обработка GET-запроса (отображение формы)
+    if request.method == 'GET':
+        try:
+            job_templates = [f for f in os.listdir('data/json-requirements') 
+                           if f.endswith('.json')]
+            return render_template('analyzer.html', job_templates=job_templates)
+        except Exception as e:
+            return str(e), 500
 
+    # Обработка AJAX-запроса с прогресс-баром
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        def generate():
+            try:
+                form_data = request.form.to_dict()
+                vacancy_name = form_data.get('vacancy_query', '').strip()
+                vacancy_template = form_data.get('vacancy_template', '').strip()
+                vac_count = min(100, int(form_data.get('quantity', 100)))
+
+                # Валидация параметров
+                if not all([vacancy_name, vacancy_template, vac_count > 0]):
+                    raise ValueError("Неверные параметры запроса")
+
+                # Этап 1: Загрузка шаблона (10%)
+                yield json.dumps({
+                    'progress': 10,
+                    'message': 'Загрузка шаблона требований...'
+                }) + '\n'
+                
+                keywords_list = load_requirements(vacancy_template)
+                
+                # Этап 2: Поиск вакансий (20%)
+                yield json.dumps({
+                    'progress': 20,
+                    'message': 'Поиск вакансий...'
+                }) + '\n'
+                
+                vacancies = fetch_vacancies(vacancy_name, vac_count)
+                if not vacancies:
+                    raise ValueError("Не найдено вакансий по запросу")
+                
+                total_to_process = min(vac_count, len(vacancies))
+                
+                # Этап 3: Анализ вакансий (20-80%)
+                counts = defaultdict(int)
+                for i, vacancy in enumerate(vacancies[:total_to_process]):
+                    progress = 20 + int((i / total_to_process) * 60)
+                    yield json.dumps({
+                        'progress': progress,
+                        'message': f'Анализ вакансии {i+1}/{total_to_process}'
+                    }) + '\n'
+                    
+                    details = get_vacancy_details(vacancy['id'])
+                    if details:
+                        text = parse_vacancy_details(details)
+                        found = count_keywords(text, keywords_list)
+                        for key in found:
+                            counts[key] += 1
+                
+                # Этап 4: Обработка результатов (80-90%)
+                yield json.dumps({
+                    'progress': 80,
+                    'message': 'Обработка результатов...'
+                }) + '\n'
+                
+                grouped = process_results(counts)
+                
+                # Этап 5: Сохранение (90-100%)
+                yield json.dumps({
+                    'progress': 90,
+                    'message': 'Сохранение результатов...'
+                }) + '\n'
+                
+                csv_path = save_results(vacancy_name, grouped, total_to_process)
+                
+                yield json.dumps({
+                    'progress': 100,
+                    'message': 'Анализ завершен!',
+                    'redirect': url_for('work_with_analyzer.show_results')
+                }) + '\n'
+
+            except Exception as e:
+                yield json.dumps({
+                    'error': str(e),
+                    'progress': 0,
+                    'message': f'Ошибка: {str(e)}'
+                }) + '\n'
+
+        return Response(stream_with_context(generate()), mimetype='text/event-stream')
+
+    # Обычная POST-обработка (без прогресс-бара)
+    try:
+        form_data = request.form.to_dict()
         vacancy_name = form_data['vacancy_query']
         vacancy_template = form_data['vacancy_template']
         vac_count = int(form_data['quantity'])
 
-        print('This is vacancy_template', form_data)
-        print('This is vacancy_template', vacancy_template)
-        # Получаем список ключевых слов
         keywords_list = load_requirements(vacancy_template)
         vacancies = fetch_vacancies(vacancy_name, vac_count)
-
-        # Анализируем вакансии
+        
         counts = defaultdict(int)
         for vacancy in vacancies[:vac_count]:
-            vacancy_id = vacancy['id']
-            details = get_vacancy_details(vacancy_id)
-            if not details:
-                continue
+            details = get_vacancy_details(vacancy['id'])
+            if details:
+                text = parse_vacancy_details(details)
+                found = count_keywords(text, keywords_list)
+                for key in found:
+                    counts[key] += 1
 
-            text = parse_vacancy_details(details)
-            found = count_keywords(text, keywords_list)
-
-            for key in found:
-                counts[key] += 1
-
-        # Группируем результаты по категориям
-        grouped = defaultdict(list)
-        for (category, keyword), count in counts.items():
-            grouped[category].append((keyword, count))
-
-        # Сортируем по убыванию частоты
-        for category in grouped:
-            grouped[category].sort(key=lambda x: -x[1])
-
-        # Сохраняем в CSV
-        filename = f'{vacancy_name}_stats.csv'
-        os.makedirs('data/csv-responses', exist_ok=True)
-        csv_path = os.path.join('data/csv-responses', filename)
-
-        with open(csv_path, 'w', newline='', encoding='utf-8') as csvfile:
-            writer = csv.writer(csvfile)
-            for category, keywords in grouped.items():
-                writer.writerow([category])
-                for keyword, count in keywords:
-                    writer.writerow([keyword, count])
-
-        # Сохраняем данные в сессии для отображения на странице результатов
+        grouped = process_results(counts)
+        csv_path = save_results(vacancy_name, grouped, len(vacancies[:vac_count]))
+        
         session['analysis_results'] = {
             'vacancy_name': vacancy_name,
             'csv_path': csv_path,
             'results': grouped,
-            'total_vacancies': len(vacancies)
+            'total_vacancies': len(vacancies[:vac_count]),
+            'analysis_date': datetime.now().strftime('%Y-%m-%d %H:%M')
         }
 
-        # Перенаправляем на страницу с результатами
         return redirect(url_for('work_with_analyzer.show_results'))
 
-    # GET запрос - отображаем форму
-    job_templates = os.listdir('data/json-requirements')
-    return render_template('analyzer.html', job_templates=job_templates)
+    except Exception as e:
+        return str(e), 500
+
+
+def process_results(counts):
+    """Группировка и сортировка результатов"""
+    grouped = defaultdict(list)
+    for (category, keyword), count in counts.items():
+        grouped[category].append((keyword, count))
+    
+    for category in grouped:
+        grouped[category].sort(key=lambda x: -x[1])
+    
+    return grouped
+
+
+def save_results(vacancy_name, grouped_data, total_vacancies):
+    """Сохранение результатов в CSV"""
+    os.makedirs('data/csv-responses', exist_ok=True)
+    safe_name = ''.join(c if c.isalnum() else '_' for c in vacancy_name)
+    filename = f"{safe_name}_{datetime.now().strftime('%Y%m%d_%H%M')}.csv"
+    csv_path = f"data/csv-responses/{filename}"
+    
+    with open(csv_path, 'w', newline='', encoding='utf-8') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(['Категория', 'Навык', 'Количество', 'Всего вакансий', total_vacancies])
+        for category, keywords in grouped_data.items():
+            for keyword, count in keywords:
+                writer.writerow([category, keyword, count])
+    
+    return csv_path
 
 
 @work_with_analyzer_bp.route('/results')
@@ -149,7 +246,7 @@ def fetch_vacancies(vacancy_name, vacancy_count=0) -> list:
         page += 1
         time.sleep(0.5)
 
-    return vacancies  # Возвращаем результат в любом случае
+    return vacancies
 
 
 def get_vacancy_details(vacancy_id) -> Optional[Dict[str, Any]]:
@@ -190,6 +287,7 @@ def get_all_vacancy_count(query_string) -> int:
 
     total_vacancies = response["found"]
     return total_vacancies
+
 
 @work_with_analyzer_bp.route('/create_requirements_template', methods=['POST', 'GET'])
 def create_requirements_template():
@@ -242,6 +340,7 @@ def create_requirements_template():
     message = get_flashed_messages()
     return render_template('create_requirements_template.html', message=message)
 
+
 @work_with_analyzer_bp.route('/progress')
 def progress():
     def generate():
@@ -249,5 +348,23 @@ def progress():
         for i in range(100):
             yield f"data: {i}\n\n"
             time.sleep(0.1)
-    
+
     return Response(generate(), mimetype='text/event-stream')
+
+
+@work_with_analyzer_bp.route('/download-csv/<filename>')
+def download_csv(filename):
+    """Скачивание CSV-файла."""
+    try:
+        # Убедимся, что filename содержит только имя файла
+        safe_filename = os.path.basename(filename)
+        directory = os.path.join(current_app.root_path, 'data', 'csv-responses')
+        return send_from_directory(
+            directory=directory,
+            path=safe_filename,
+            as_attachment=True,
+            mimetype='text/csv'
+        )
+    except FileNotFoundError:
+        flash("Файл не найден", "error")
+        return redirect(url_for('work_with_analyzer.show_results'))

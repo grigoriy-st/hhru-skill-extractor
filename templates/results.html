@@ -1,33 +1,30 @@
 <!-- Отображение результатов запроса. -->
 {% extends "base.html" %}
 
-
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/register_style.css')}}"> 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/register_style.css')}}">
 {% endblock %}
 
 {% block content %}
-
-{% if message == "The user has been added" %}
-    <h2 class="success_message">{{ message }}</h2>
-
-{% else %}
-    <h2 class="error_message">{{ message }}</h2>
-{% endif %}
 <div class="container">
     <h1>Результаты анализа: {{ results.vacancy_name }}</h1>
     <p>Проанализировано вакансий: {{ results.total_vacancies }}</p>
     
-    <a href="{{ url_for('static', filename='csv-responses/' + results.csv_path.split('/')[-1]) }}" 
-       download class="btn btn-primary">
-        Скачать CSV
-    </a>
+    <div class="mb-4">
+        <a href="{{ url_for('work_with_analyzer.download_csv', filename=results.csv_path.split('/')[-1]) }}" 
+           class="btn btn-primary">
+            <i class="fas fa-file-download"></i> Скачать CSV
+        </a>
+        <a href="{{ url_for('work_with_analyzer.get_analyzer_page') }}" class="btn btn-secondary">
+            Новый анализ
+        </a>
+    </div>
     
     <div class="results">
         {% for category, skills in results.results.items() %}
         <h2>{{ category }}</h2>
-        <table class="table">
-            <thead>
+        <table class="table table-striped">
+            <thead class="thead-dark">
                 <tr>
                     <th>Навык</th>
                     <th>Количество упоминаний</th>
@@ -45,5 +42,4 @@
         {% endfor %}
     </div>
 </div>
-
 {% endblock %}

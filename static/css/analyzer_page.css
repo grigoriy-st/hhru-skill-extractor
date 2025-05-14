@@ -84,3 +84,12 @@ main {
     justify-content: space-between;
     margin-bottom: 5px;
 }
+
+#progress-status {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+#progress-percent {
+  display: inline-block;
+}

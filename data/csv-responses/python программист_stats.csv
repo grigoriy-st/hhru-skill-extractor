@@ -1,19 +1,20 @@
+виртуализация/контейнеаризация
+docker,52
+kubernetes,17
 тестирование
 тестирование,20
 pytest,16
 unittest,2
 фреймворки
 django,34
-fastapi,29
+fastapi,30
 cherrypy,1
-виртуализация/контейнеаризация
-docker,51
-kubernetes,16
 библиотеки
 pandas,9
 aiogram,7
 tensorflow,3
 matplotlib,2
+beautifulsoup,1
 основы языка
 ооп,8
 функции,1

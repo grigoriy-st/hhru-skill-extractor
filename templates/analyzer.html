@@ -58,13 +58,13 @@
     </form>
 
     <script src="{{ url_for('static', filename='js/progress_bar.js') }}"></script>
-    <div id="progress-container" style="display: none; margin-top: 20px;">
+    <div id="progress-container" style="display: none; margin: 20px 0;">
         <div class="progress-info">
             <span id="progress-status">Подготовка к анализу...</span>
-            <!-- <span id="progress-count">0/0</span> -->
+            <span id="progress-percent">0%</span>
         </div>
-        <div class="progress-bar">
-            <div id="progress" class="progress-fill"></div>
+        <div class="progress-bar" style="height: 20px; background: #eee; border-radius: 4px;">
+            <div id="progress" style="height: 100%; width: 0%; background: #4CAF50; border-radius: 4px;"></div>
         </div>
     </div>
 
