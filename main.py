@@ -54,8 +54,10 @@ from typing import Optional, Dict, Any  # Для аннотаций
 def get_main_page():
     return render_template('main_page.html')
 
+
 def main():
     ...
+
 @app.route('/users')
 def get_users():
     db_ss = db_session.create_session()

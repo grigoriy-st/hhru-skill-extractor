@@ -87,4 +87,55 @@ function populateFormFromTemplate(template) {
         lastBlock.querySelector('[name$="_name"]').value = categoryName;
         lastBlock.querySelector('[name$="_skills"]').value = skills.join('\n');
     }
-}
+}document.querySelector('.vacancy-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Показываем progress bar
+    document.getElementById('progress-container').style.display = 'block';
+    document.getElementById('progress-status').textContent = 'Анализ начат...';
+    
+    // Собираем данные формы
+    const formData = new FormData(this);
+    
+    // Отправляем запрос на сервер
+    fetch("{{ url_for('work_with_analyzer.get_analyzer_page') }}", {
+        method: 'POST',
+        body: formData,
+        // Добавляем redirect: 'manual' для ручной обработки редиректа
+        redirect: 'manual'
+    })
+    .then(response => {
+        // Если сервер вернул редирект (код 302)
+        if (response.status === 302) {
+            // Получаем URL редиректа из заголовка 'Location'
+            const redirectUrl = response.headers.get('Location');
+            // Перенаправляем вручную
+            window.location.href = redirectUrl;
+        } else {
+            // Если это не редирект, обрабатываем как JSON
+            return response.json();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('progress-status').textContent = 'Ошибка: ' + error.message;
+    });
+});     // Если ответ не JSON, пробуем прочитать как текст
+        return response.text().then(text => {
+            throw new Error(`Ожидался JSON, но получен: ${text.slice(0, 100)}...`);
+        });
+    })
+    .then(data => {
+        if (data) {
+            // Обработка данных, если они есть
+            console.log("Данные с сервера:", data);
+            if (data.redirect) {
+                window.location.href = data.redirect;
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        progressStatus.textContent = 'Ошибка: ' + error.message;
+    });
+});

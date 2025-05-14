@@ -12,7 +12,10 @@
         Введите название вакансии и получите детальный анализ требований работодателей.
     </p>
 
-    <form action="{{ url_for('work_with_analyzer.get_analyzer_page') }}" method="post" class="vacancy-form">
+    <form action="/analyzer" 
+    method="POST"
+    class="vacancy-form"
+    data-results-url="/results">
         <div class="form-group">
             <label for="vacancy_query">Вакансия:</label>
             <input type="text" 

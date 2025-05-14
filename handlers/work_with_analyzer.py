@@ -23,27 +23,23 @@ from models.users import User
 
 work_with_analyzer_bp = Blueprint('work_with_analyzer', __name__)
 
+
 @work_with_analyzer_bp.route('/analyzer', methods=['POST', 'GET'])
 def get_analyzer_page():
     """Отображение страницы с анализатором."""
     if request.method == 'POST':
         form_data = request.form.to_dict()
-        
-        # Обработка данных формы
-        template_data = {
-            "vacancy_query": form_data.get('vacancy_query', ''),
-            "quantity": int(form_data.get('quantity', 100)),
-            "vacancy_template": form_data.get('template', ''),
-        }
-        
-        vacancy_name = template_data['vacancy_query']
-        vacancy_template = template_data['vacancy_template']
-        vac_count = template_data['quantity']
-        
+
+        vacancy_name = form_data['vacancy_query']
+        vacancy_template = form_data['vacancy_template']
+        vac_count = int(form_data['quantity'])
+
+        print('This is vacancy_template', form_data)
+        print('This is vacancy_template', vacancy_template)
         # Получаем список ключевых слов
         keywords_list = load_requirements(vacancy_template)
         vacancies = fetch_vacancies(vacancy_name, vac_count)
-        
+
         # Анализируем вакансии
         counts = defaultdict(int)
         for vacancy in vacancies[:vac_count]:
@@ -51,34 +47,34 @@ def get_analyzer_page():
             details = get_vacancy_details(vacancy_id)
             if not details:
                 continue
-                
+
             text = parse_vacancy_details(details)
             found = count_keywords(text, keywords_list)
-            
+
             for key in found:
                 counts[key] += 1
-        
+
         # Группируем результаты по категориям
         grouped = defaultdict(list)
         for (category, keyword), count in counts.items():
             grouped[category].append((keyword, count))
-        
+
         # Сортируем по убыванию частоты
         for category in grouped:
             grouped[category].sort(key=lambda x: -x[1])
-        
+
         # Сохраняем в CSV
         filename = f'{vacancy_name}_stats.csv'
         os.makedirs('data/csv-responses', exist_ok=True)
         csv_path = os.path.join('data/csv-responses', filename)
-        
+
         with open(csv_path, 'w', newline='', encoding='utf-8') as csvfile:
             writer = csv.writer(csvfile)
             for category, keywords in grouped.items():
                 writer.writerow([category])
                 for keyword, count in keywords:
                     writer.writerow([keyword, count])
-        
+
         # Сохраняем данные в сессии для отображения на странице результатов
         session['analysis_results'] = {
             'vacancy_name': vacancy_name,
@@ -86,26 +82,30 @@ def get_analyzer_page():
             'results': grouped,
             'total_vacancies': len(vacancies)
         }
-        
+
         # Перенаправляем на страницу с результатами
         return redirect(url_for('work_with_analyzer.show_results'))
-    
+
     # GET запрос - отображаем форму
     job_templates = os.listdir('data/json-requirements')
     return render_template('analyzer.html', job_templates=job_templates)
+
 
 @work_with_analyzer_bp.route('/results')
 def show_results():
     """Страница с результатами анализа."""
     if 'analysis_results' not in session:
         return redirect(url_for('work_with_analyzer.get_analyzer_page'))
-    
+
     results = session['analysis_results']
     return render_template('results.html', results=results)
+
 
 def load_requirements(vacancy_name):
     """ Выгрузка требований из json-файла. """
     print('-'*10, vacancy_name)
+    print("This is vac", vacancy_name)
+    # print(os.path())
     filename = f"data/json-requirements/{vacancy_name}"
     with open(filename, 'r', encoding='utf-8') as f:
         requirements = json.load(f)
