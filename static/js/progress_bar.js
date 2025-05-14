@@ -25,7 +25,7 @@ document.querySelector('.vacancy-form').addEventListener('submit', function(e) {
                 buffer += decoder.decode(value, { stream: true });
 
                 let lines = buffer.split('\n');
-                buffer = lines.pop(); // Оставим последнюю строку (возможно, неполную)
+                buffer = lines.pop(); // Оставим последнюю строку
 
                 for (let line of lines) {
                     if (!line.trim()) continue;

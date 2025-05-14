@@ -49,7 +49,6 @@ from pprint import pprint
 from typing import Optional, Dict, Any  # Для аннотаций
 
 
-
 @app.route('/main')
 def get_main_page():
     return render_template('main_page.html')
@@ -57,6 +56,7 @@ def get_main_page():
 
 def main():
     ...
+
 
 @app.route('/users')
 def get_users():

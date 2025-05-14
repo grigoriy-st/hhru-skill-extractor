@@ -2,7 +2,7 @@ import os
 import csv
 import json
 import time
-import logging
+# import logging
 import requests
 
 from collections import defaultdict
@@ -12,10 +12,11 @@ from werkzeug.utils import secure_filename
 from typing import Optional, Dict, Any  # Для аннотаций
 
 from flask import (
-    Flask, Blueprint,
-    request,
-    flash, redirect, render_template, url_for, send_from_directory, stream_with_context,
-    current_app, get_flashed_messages, jsonify, Response, session
+    Blueprint, Response,
+    request, session, current_app,
+    flash, redirect, render_template, url_for,
+    send_from_directory, stream_with_context,
+    get_flashed_messages,
 )
 
 from data import db_session
@@ -30,16 +31,21 @@ import os
 import csv
 from datetime import datetime
 
+
 @work_with_analyzer_bp.route('/analyzer', methods=['POST', 'GET'])
 def get_analyzer_page():
     """Обработчик анализа вакансий с поддержкой прогресс-бара"""
-    
-    # Обработка GET-запроса (отображение формы)
+
     if request.method == 'GET':
         try:
-            job_templates = [f for f in os.listdir('data/json-requirements') 
-                           if f.endswith('.json')]
-            return render_template('analyzer.html', job_templates=job_templates)
+            job_templates = []
+
+            for f in os.listdir('data/json-requirements'):
+                if f.endswith('.json'):
+                    job_templates.append(f)
+
+            return render_template('analyzer.html',
+                                   job_templates=job_templates)
         except Exception as e:
             return str(e), 500
 
@@ -50,7 +56,7 @@ def get_analyzer_page():
                 form_data = request.form.to_dict()
                 vacancy_name = form_data.get('vacancy_query', '').strip()
                 vacancy_template = form_data.get('vacancy_template', '').strip()
-                vac_count = min(100, int(form_data.get('quantity', 100)))
+                vac_count = min(50, int(form_data.get('quantity', 50)))
 
                 # Валидация параметров
                 if not all([vacancy_name, vacancy_template, vac_count > 0]):
@@ -61,21 +67,21 @@ def get_analyzer_page():
                     'progress': 10,
                     'message': 'Загрузка шаблона требований...'
                 }) + '\n'
-                
+
                 keywords_list = load_requirements(vacancy_template)
-                
+
                 # Этап 2: Поиск вакансий (20%)
                 yield json.dumps({
                     'progress': 20,
                     'message': 'Поиск вакансий...'
                 }) + '\n'
-                
+
                 vacancies = fetch_vacancies(vacancy_name, vac_count)
                 if not vacancies:
                     raise ValueError("Не найдено вакансий по запросу")
-                
+
                 total_to_process = min(vac_count, len(vacancies))
-                
+
                 # Этап 3: Анализ вакансий (20-80%)
                 counts = defaultdict(int)
                 for i, vacancy in enumerate(vacancies[:total_to_process]):
@@ -84,22 +90,22 @@ def get_analyzer_page():
                         'progress': progress,
                         'message': f'Анализ вакансии {i+1}/{total_to_process}'
                     }) + '\n'
-                    
+
                     details = get_vacancy_details(vacancy['id'])
                     if details:
                         text = parse_vacancy_details(details)
                         found = count_keywords(text, keywords_list)
                         for key in found:
                             counts[key] += 1
-                
+
                 # Этап 4: Обработка результатов (80-90%)
                 yield json.dumps({
                     'progress': 80,
                     'message': 'Обработка результатов...'
                 }) + '\n'
-                
+
                 grouped = process_results(counts)
-                
+
                 # Этап 5: Сохранение (90-100%)
                 yield json.dumps({
                     'progress': 90,
@@ -200,8 +206,8 @@ def show_results():
 
 def load_requirements(vacancy_name):
     """ Выгрузка требований из json-файла. """
-    print('-'*10, vacancy_name)
-    print("This is vac", vacancy_name)
+    # print('-'*10, vacancy_name)
+    # print("This is vac", vacancy_name)
     # print(os.path())
     filename = f"data/json-requirements/{vacancy_name}"
     with open(filename, 'r', encoding='utf-8') as f:
@@ -251,6 +257,7 @@ def fetch_vacancies(vacancy_name, vacancy_count=0) -> list:
 
 def get_vacancy_details(vacancy_id) -> Optional[Dict[str, Any]]:
     """ Парсинг данных с одной вакансии. """
+
     url = f'https://api.hh.ru/vacancies/{vacancy_id}'
     headers = {'User-Agent': 'Mozilla/5.0'}
     response = requests.get(url, headers=headers)
@@ -282,6 +289,7 @@ def count_keywords(text, keywords_list) -> set:
 
 def get_all_vacancy_count(query_string) -> int:
     """ Возращает общее кол-во вакансий по запросу. """
+
     url = f"https://api.hh.ru/vacancies?text={query_string}"
     response = requests.get(url).json()
 
@@ -295,12 +303,12 @@ def create_requirements_template():
 
         form_data = request.form.to_dict()
         pprint(form_data)  # Для отладки
-        
+
         # Создаем структуру для JSON
         template_data = {
             "template_name": form_data.get('template_name', ''),
         }
-        
+
         # Обрабатываем категории
         categories = {}
         for key, value in form_data.items():
@@ -309,24 +317,24 @@ def create_requirements_template():
                 parts = key.split('[')
                 category_id = parts[1].split(']')[0]
                 field_type = parts[2].split(']')[0]
-                
+
                 if category_id not in categories:
                     categories[category_id] = {}
-                
+
                 categories[category_id][field_type] = value
-        
+
         # Добавляем категории в template_data
         for category in categories.values():
             skills = [skill.strip() for skill in category['skills'].split('\n') if skill.strip()]
             template_data[category['name']] = skills
-        
+
         # Сохраняем в файл
         templates_dir = 'data/json-requirements'
         os.makedirs(templates_dir, exist_ok=True)
-        
+
         filename = secure_filename(f"{template_data['template_name']}.json")
         filepath = os.path.join(templates_dir, filename)
-        
+
         try:
             with open(filepath, 'w', encoding='utf-8') as f:
                 json.dump(template_data, f, ensure_ascii=False, indent=4)
@@ -355,6 +363,7 @@ def progress():
 @work_with_analyzer_bp.route('/download-csv/<filename>')
 def download_csv(filename):
     """Скачивание CSV-файла."""
+
     try:
         # Убедимся, что filename содержит только имя файла
         safe_filename = os.path.basename(filename)
