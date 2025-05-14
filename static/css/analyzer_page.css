@@ -3,6 +3,11 @@ main {
     width: 70%;
 }
 
+.hh_ru_logo {
+    width: 60px;
+    height: auto;
+}
+
 .analyzer-container {
     display: flex;
     justify-content: space-evenly;

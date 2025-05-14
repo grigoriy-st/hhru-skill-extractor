@@ -6,7 +6,9 @@
 
 {% block content %}
 <div class="analyzer-container">
-    <h1 class="analyzer-title">Анализатор вакансий с hh.ru</h1>
+    <h1 class="analyzer-title">Анализатор вакансий с 
+        <img class="hh_ru_logo" src="{{ url_for('static', filename='imgs/hh_ru_logo.png')}}" alt="hh_ru_logo">
+    </h1>
     <p class="analyzer-description">
         Узнайте, какие навыки наиболее востребованы для вашей профессии.</br>
         Введите название вакансии и получите детальный анализ требований работодателей.

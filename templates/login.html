@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
+{% if message == "not authorized" %}
+<!-- Сделайть через flush message -->
+    <h2>Вы не авторизованы!</h2>
+{% endif %}
+
 {% block content %}
     <h1>Авторизация</h1>
     <form action="" method="post">

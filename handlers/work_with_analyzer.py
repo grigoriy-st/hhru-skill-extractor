@@ -194,18 +194,9 @@ def save_results(vacancy_name, grouped_data, total_vacancies):
     return csv_path
 
 
-@work_with_analyzer_bp.route('/results')
-def show_results():
-    """Страница с результатами анализа."""
-    if 'analysis_results' not in session:
-        return redirect(url_for('work_with_analyzer.get_analyzer_page'))
-
-    results = session['analysis_results']
-    return render_template('results.html', results=results)
-
-
 def load_requirements(vacancy_name):
     """ Выгрузка требований из json-файла. """
+
     # print('-'*10, vacancy_name)
     # print("This is vac", vacancy_name)
     # print(os.path())
@@ -222,6 +213,7 @@ def load_requirements(vacancy_name):
 
 def fetch_vacancies(vacancy_name, vacancy_count=0) -> list:
     """ Парсинг всех вакансий. """
+
     base_url = 'https://api.hh.ru/vacancies'
     headers = {'User-Agent': 'Mozilla/5.0'}
     page = 0
@@ -295,6 +287,16 @@ def get_all_vacancy_count(query_string) -> int:
 
     total_vacancies = response["found"]
     return total_vacancies
+
+
+@work_with_analyzer_bp.route('/results')
+def show_results():
+    """Страница с результатами анализа."""
+    if 'analysis_results' not in session:
+        return redirect(url_for('work_with_analyzer.get_analyzer_page'))
+
+    results = session['analysis_results']
+    return render_template('results.html', results=results)
 
 
 @work_with_analyzer_bp.route('/create_requirements_template', methods=['POST', 'GET'])

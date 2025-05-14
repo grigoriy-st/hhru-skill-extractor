@@ -73,7 +73,8 @@ def load_user(user_id):
 
 @login_manager.unauthorized_handler
 def unauthorized():
-    return 'Вы не авторизованы. Пожалуйста перейдите по <a href="/login">ссылке</a> для авторизации.'
+    message = "not authorized"
+    return render_template('login.html', message=message)
 
 
 if __name__ == '__main__':
