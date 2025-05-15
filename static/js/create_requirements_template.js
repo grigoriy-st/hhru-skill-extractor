@@ -69,7 +69,6 @@ function populateFormFromTemplate(template) {
     // Очищаем существующие категории
     document.getElementById('categories-container').innerHTML = '';
     
-    // Устанавливаем имя шаблона
     document.getElementById('template_name').value = template.template_name || '';
     
     // Добавляем категории
@@ -107,9 +106,7 @@ function populateFormFromTemplate(template) {
     .then(response => {
         // Если сервер вернул редирект (код 302)
         if (response.status === 302) {
-            // Получаем URL редиректа из заголовка 'Location'
             const redirectUrl = response.headers.get('Location');
-            // Перенаправляем вручную
             window.location.href = redirectUrl;
         } else {
             // Если это не редирект, обрабатываем как JSON

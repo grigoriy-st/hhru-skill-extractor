@@ -40,8 +40,6 @@ from datetime import datetime
 def get_analyzer_page():
     """Обработчик анализа вакансий с поддержкой прогресс-бара"""
 
-    if request.method == 'POST':
-        send_query()
 
     if request.method == 'GET':
         try:
@@ -68,6 +66,8 @@ def get_analyzer_page():
                 # Валидация параметров
                 if not all([vacancy_name, vacancy_template, vac_count > 0]):
                     raise ValueError("Неверные параметры запроса")
+
+                yield ''
 
                 # Этап 1: Загрузка шаблона (10%)
                 yield json.dumps({
@@ -136,8 +136,9 @@ def get_analyzer_page():
 
         return Response(stream_with_context(generate()), mimetype='text/event-stream')
 
+    if request.method == 'POST':
+        send_query()
 
-# @work_with_analyzer_bp.route('/analyzer', methods=['POST'])
 def send_query():
     """ POST-обработка запроса. """
     try:
@@ -370,7 +371,6 @@ def create_requirements_template():
 @work_with_analyzer_bp.route('/progress')
 def progress():
     def generate():
-        # Здесь реализуйте логику отправки событий
         for i in range(100):
             yield f"data: {i}\n\n"
             time.sleep(0.1)
