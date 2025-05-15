@@ -3,6 +3,7 @@ import csv
 import json
 import time
 # import logging
+import sqlite3
 import requests
 
 from collections import defaultdict
@@ -40,6 +41,8 @@ from datetime import datetime
 def get_analyzer_page():
     """Обработчик анализа вакансий с поддержкой прогресс-бара"""
 
+    if request.method == 'POST':
+        send_query()
 
     if request.method == 'GET':
         try:
@@ -49,8 +52,15 @@ def get_analyzer_page():
                 if f.endswith('.json'):
                     job_templates.append(f)
 
+            
+            con = sqlite3.connect('db/database.sqlite')
+            cursor = con.cursor()
+            cursor.execute("SELECT id, title FROM cities")
+            regions = cursor.fetchall()
+            con.close()
             return render_template('analyzer.html',
-                                   job_templates=job_templates)
+                                   job_templates=job_templates,
+                                   regions=regions)
         except Exception as e:
             return str(e), 500
 
@@ -136,8 +146,6 @@ def get_analyzer_page():
 
         return Response(stream_with_context(generate()), mimetype='text/event-stream')
 
-    if request.method == 'POST':
-        send_query()
 
 def send_query():
     """ POST-обработка запроса. """

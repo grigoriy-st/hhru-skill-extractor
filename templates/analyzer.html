@@ -38,11 +38,11 @@
         </div>
 
         <div class="option-group">
-            <label for="region">Регион:</label>
-            <select name="region" id="region" class="form-select">
-                <option value="1">Москва</option>
-                <option value="2">Санкт-Петербург</option>
-                <option value="3">Все регионы</option>
+            <label for="city">Город:</label>
+            <select name="city" id="city" class="form-select">
+                {% for id, name in regions %}
+                    <option value="{{ id }}">{{ name }}</option>
+                {% endfor %}
             </select>
         </div>
         
