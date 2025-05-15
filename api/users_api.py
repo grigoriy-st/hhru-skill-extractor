@@ -9,7 +9,7 @@ from data import db_session
 
 from models.users import User
 
-users_api = Blueprint('users_apu', __name__)
+users_api = Blueprint('users_api', __name__)
 
 
 @users_api.route('/api/users', methods=['GET'])

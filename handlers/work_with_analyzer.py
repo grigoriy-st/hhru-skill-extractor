@@ -25,7 +25,11 @@ from models.users import User
 work_with_analyzer_bp = Blueprint('work_with_analyzer', __name__)
 
 
-from flask import Response, stream_with_context, json, request, redirect, url_for, session, render_template
+from flask import (
+    Response, json,
+    request, session,
+    stream_with_context, redirect, url_for, render_template
+)
 from collections import defaultdict
 import os
 import csv
@@ -35,6 +39,9 @@ from datetime import datetime
 @work_with_analyzer_bp.route('/analyzer', methods=['POST', 'GET'])
 def get_analyzer_page():
     """Обработчик анализа вакансий с поддержкой прогресс-бара"""
+
+    if request.method == 'POST':
+        send_query()
 
     if request.method == 'GET':
         try:
@@ -129,7 +136,10 @@ def get_analyzer_page():
 
         return Response(stream_with_context(generate()), mimetype='text/event-stream')
 
-    # Обычная POST-обработка (без прогресс-бара)
+
+# @work_with_analyzer_bp.route('/analyzer', methods=['POST'])
+def send_query():
+    """ POST-обработка запроса. """
     try:
         form_data = request.form.to_dict()
         vacancy_name = form_data['vacancy_query']
@@ -138,7 +148,7 @@ def get_analyzer_page():
 
         keywords_list = load_requirements(vacancy_template)
         vacancies = fetch_vacancies(vacancy_name, vac_count)
-        
+
         counts = defaultdict(int)
         for vacancy in vacancies[:vac_count]:
             details = get_vacancy_details(vacancy['id'])
@@ -149,8 +159,9 @@ def get_analyzer_page():
                     counts[key] += 1
 
         grouped = process_results(counts)
-        csv_path = save_results(vacancy_name, grouped, len(vacancies[:vac_count]))
-        
+        csv_path = save_results(vacancy_name, grouped,
+                                len(vacancies[:vac_count]))
+
         session['analysis_results'] = {
             'vacancy_name': vacancy_name,
             'csv_path': csv_path,
@@ -170,10 +181,10 @@ def process_results(counts):
     grouped = defaultdict(list)
     for (category, keyword), count in counts.items():
         grouped[category].append((keyword, count))
-    
+
     for category in grouped:
         grouped[category].sort(key=lambda x: -x[1])
-    
+
     return grouped
 
 
@@ -183,14 +194,14 @@ def save_results(vacancy_name, grouped_data, total_vacancies):
     safe_name = ''.join(c if c.isalnum() else '_' for c in vacancy_name)
     filename = f"{safe_name}_{datetime.now().strftime('%Y%m%d_%H%M')}.csv"
     csv_path = f"data/csv-responses/{filename}"
-    
+
     with open(csv_path, 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(['Категория', 'Навык', 'Количество', 'Всего вакансий', total_vacancies])
         for category, keywords in grouped_data.items():
             for keyword, count in keywords:
                 writer.writerow([category, keyword, count])
-    
+
     return csv_path
 
 
@@ -299,7 +310,8 @@ def show_results():
     return render_template('results.html', results=results)
 
 
-@work_with_analyzer_bp.route('/create_requirements_template', methods=['POST', 'GET'])
+@work_with_analyzer_bp.route('/create_requirements_template',
+                             methods=['POST', 'GET'])
 def create_requirements_template():
     if request.method == 'POST':
 
@@ -327,7 +339,11 @@ def create_requirements_template():
 
         # Добавляем категории в template_data
         for category in categories.values():
-            skills = [skill.strip() for skill in category['skills'].split('\n') if skill.strip()]
+            skills = []
+            for skill in category['skills'].split('\n'):
+                if skill.strip():
+                    skills.append(skill.strip())
+
             template_data[category['name']] = skills
 
         # Сохраняем в файл
@@ -344,7 +360,7 @@ def create_requirements_template():
         except Exception as e:
             flash(f'Ошибка при сохранении: {str(e)}', 'error')
 
-        flash(f'Шаблон {template_data["template_name"]} успешно сохранён!') 
+        flash(f'Шаблон {template_data["template_name"]} успешно сохранён!')
         return redirect(url_for('work_with_analyzer.create_requirements_template'))
 
     message = get_flashed_messages()

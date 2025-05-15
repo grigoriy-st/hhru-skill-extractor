@@ -15,8 +15,9 @@ from flask_restful import reqparse, abort, Api, Resource
 from flask_login import (LoginManager, login_user,
                          login_required, logout_user,
                          current_user)
-
+# API
 from api.users_api import users_api
+from api.analyzer_api import analyzer_api
 
 # Models
 from models.users import User
@@ -25,6 +26,11 @@ from models.users import User
 from handlers.work_with_users import work_with_users_bp
 from handlers.auth import auth_bp
 from handlers.work_with_analyzer import work_with_analyzer_bp
+
+from collections import defaultdict
+from pprint import pprint
+
+from typing import Optional, Dict, Any  # Для аннотаций
 
 logging.basicConfig(level=logging.INFO)
 
@@ -36,18 +42,15 @@ app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
 # Blueprints
 app.register_blueprint(work_with_users_bp)
-app.register_blueprint(users_api)
 app.register_blueprint(auth_bp)
 app.register_blueprint(work_with_analyzer_bp)
 
+# API соединения
+app.register_blueprint(users_api)
+app.register_blueprint(analyzer_api)
+
 login_manager = LoginManager()
 login_manager.init_app(app)
-
-from collections import defaultdict
-from pprint import pprint
-
-from typing import Optional, Dict, Any  # Для аннотаций
-
 
 @app.route('/main')
 def get_main_page():

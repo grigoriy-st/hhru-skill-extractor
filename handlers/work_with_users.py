@@ -51,7 +51,12 @@ def get_user_list():
     db_sess.close()
     return render_template('user_list.html', users=users, messages=messages)
 
+
 @work_with_users_bp.route('/dashboard')
 def get_dashbord_page():
     if not current_user.is_authenticated:
-        return redirect()
+        message = ('Чтобы просматривать историю запросов,<br>'
+                  'необходимо войти или зарегистрироваться',
+                  'error')
+        flash(message)
+        return redirect('/login')

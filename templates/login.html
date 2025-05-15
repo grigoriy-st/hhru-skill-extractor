@@ -1,11 +1,19 @@
 {% extends "base.html" %}
 
-{% if message == "not authorized" %}
-<!-- Сделайть через flush message -->
-    <h2>Вы не авторизованы!</h2>
-{% endif %}
 
 {% block content %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message, status in messages %}
+                {% if status == 'success' %}
+                    <h2 style="color: green;">{{ message|safe }}</h2>
+                {% elif status == 'error' %}
+                    <h2 style="color: red;">{{ message|safe }}</h2>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     <h1>Авторизация</h1>
     <form action="" method="post">
         {{ form.hidden_tag() }}

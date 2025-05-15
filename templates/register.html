@@ -7,12 +7,17 @@
 
 {% block content %}
 
-{% if message == "The user has been added" %}
-    <h2 class="success_message">{{ message }}</h2>
-
-{% else %}
-    <h2 class="error_message">{{ message }}</h2>
-{% endif %}
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message, status in messages %}
+            {% if status == 'success' %}
+                <h2 style="color: green;">{{ message }}</h2>
+            {% elif status == 'error' %}
+                <h2 style="color: red;">{{ message }}</h2>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 
 <h1>Register Form</h1>
 <form class="form1" action="/register" method="post">
