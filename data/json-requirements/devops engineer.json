@@ -1,0 +1,89 @@
+{
+    "CI/CD и автоматизация": [
+        "CI/CD",
+        "GitHub Actions",
+        "GitLab CI/CD",
+        "Jenkins",
+        "ArgoCD",
+        "Tekton",
+        "CircleCI",
+        "Travis CI"
+    ],
+    "Контейнеризация и оркестрация": [
+        "Docker",
+        "Kubernetes",
+        "Podman",
+        "Helm",
+        "Kustomize",
+        "Docker Compose",
+        "Rancher",
+        "OpenShift"
+    ],
+    "Облачные платформы": [
+        "AWS",
+        "Azure",
+        "Google Cloud (GCP)",
+        "Yandex Cloud",
+        "OpenStack",
+        "Terraform (IaC)",
+        "Pulumi",
+        "CloudFormation"
+    ],
+    "Мониторинг и логирование": [
+        "Prometheus",
+        "Grafana",
+        "ELK Stack (Elasticsearch, Logstash, Kibana)",
+        "Loki",
+        "Zabbix",
+        "Datadog",
+        "Sentry",
+        "New Relic"
+    ],
+    "Инфраструктура и сети": [
+        "Linux/Unix (администрирование)",
+        "Bash/Python/Go (скрипты)",
+        "Ansible",
+        "Puppet",
+        "Chef",
+        "SaltStack",
+        "Nginx/Apache",
+        "TCP/IP, DNS, VPN, HTTP/HTTPS",
+        "iptables/nftables",
+        "Load Balancing (Nginx, HAProxy)"
+    ],
+    "Базы данных и хранилища": [
+        "PostgreSQL",
+        "MySQL/MariaDB",
+        "MongoDB",
+        "Redis",
+        "Cassandra",
+        "S3-совместимые хранилища",
+        "Ceph"
+    ],
+    "Безопасность": [
+        "SSL/TLS (Let's Encrypt, cert-manager)",
+        "HashiCorp Vault",
+        "SELinux/AppArmor",
+        "OWASP Top 10",
+        "Kubernetes RBAC",
+        "SIEM (Security Information and Event Management)",
+        "Auditd"
+    ],
+    "DevOps-методологии": [
+        "Agile/Scrum/Kanban",
+        "GitOps",
+        "Infrastructure as Code (IaC)",
+        "Site Reliability Engineering (SRE)",
+        "Chaos Engineering",
+        "Blue-Green/Canary Deployments"
+    ],
+    "Дополнительные инструменты": [
+        "Git (GitHub/GitLab/Bitbucket)",
+        "Vagrant",
+        "Packer",
+        "Grafana Tempo",
+        "Jaeger (трейсинг)",
+        "Kafka/RabbitMQ (брокеры сообщений)",
+        "Grafana Mimir/Thanos (долгосрочное хранение метрик)"
+    ]
+}

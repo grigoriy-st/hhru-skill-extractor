@@ -60,3 +60,4 @@ def get_dashbord_page():
                   'error')
         flash(message)
         return redirect('/login')
+    return render_template('dashboard.html')

@@ -1,9 +1,0 @@
-{
-    "ci/cd": [
-        "jenkins, circle ci"
-    ],
-    "template_name": "devops инженер",
-    "языки программирования": [
-        "go, python, java"
-    ]
-}

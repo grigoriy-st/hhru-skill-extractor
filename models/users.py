@@ -23,7 +23,8 @@ class User(SqlAlchemyBase, UserMixin):
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
-
+    
+    address = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     # news = relationship("News", back_populates='user')
 
     def set_password(self, password):

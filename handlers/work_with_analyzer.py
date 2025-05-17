@@ -6,11 +6,12 @@ import time
 import sqlite3
 import requests
 
+from random  import uniform
 from collections import defaultdict
 from pprint import pprint
 
 from werkzeug.utils import secure_filename
-from typing import Optional, Dict, Any  # Для аннотаций
+from typing import Optional, Tuple, Dict, List,  Any  # Для аннотаций
 
 from flask import (
     Blueprint, Response,
@@ -32,8 +33,6 @@ from flask import (
     stream_with_context, redirect, url_for, render_template
 )
 from collections import defaultdict
-import os
-import csv
 from datetime import datetime
 
 
@@ -71,9 +70,9 @@ def get_analyzer_page():
                 form_data = request.form.to_dict()
                 vacancy_name = form_data.get('vacancy_query', '').strip()
                 vacancy_template = form_data.get('vacancy_template', '').strip()
-                vac_count = min(50, int(form_data.get('quantity', 50)))
+                city_id = form_data.get('city', 0)
+                vac_count = min(9999, int(form_data.get('quantity', 50)))
 
-                # Валидация параметров
                 if not all([vacancy_name, vacancy_template, vac_count > 0]):
                     raise ValueError("Неверные параметры запроса")
 
@@ -93,13 +92,14 @@ def get_analyzer_page():
                     'message': 'Поиск вакансий...'
                 }) + '\n'
 
-                vacancies = fetch_vacancies(vacancy_name, vac_count)
+                vacancies, status = fetch_vacancies(vacancy_name, city_id,  vac_count)
+                print(vacancies)
                 if not vacancies:
                     raise ValueError("Не найдено вакансий по запросу")
 
                 total_to_process = min(vac_count, len(vacancies))
 
-                # Этап 3: Анализ вакансий (20-80%)
+                # Этап 3: Анализ вакансий (20-90%)
                 counts = defaultdict(int)
                 for i, vacancy in enumerate(vacancies[:total_to_process]):
                     progress = 20 + int((i / total_to_process) * 60)
@@ -114,8 +114,8 @@ def get_analyzer_page():
                         found = count_keywords(text, keywords_list)
                         for key in found:
                             counts[key] += 1
-
-                # Этап 4: Обработка результатов (80-90%)
+                time.sleep(1)
+                # Этап 4: Обработка результатов (90-100%)
                 yield json.dumps({
                     'progress': 80,
                     'message': 'Обработка результатов...'
@@ -123,6 +123,7 @@ def get_analyzer_page():
 
                 grouped = process_results(counts)
 
+                time.sleep(1)
                 # Этап 5: Сохранение (90-100%)
                 yield json.dumps({
                     'progress': 90,
@@ -130,18 +131,27 @@ def get_analyzer_page():
                 }) + '\n'
                 
                 csv_path = save_results(vacancy_name, grouped, total_to_process)
+
+                time.sleep(1)
+                yield json.dumps({
+                    'progress': 100,
+                    'message': 'Последние штрихи!',
+                }) + '\n'
                 
+                time.sleep(2)
                 yield json.dumps({
                     'progress': 100,
                     'message': 'Анализ завершен!',
                     'redirect': url_for('work_with_analyzer.show_results')
                 }) + '\n'
 
+                time.sleep(1)
+
             except Exception as e:
                 yield json.dumps({
                     'error': str(e),
                     'progress': 0,
-                    'message': f'Ошибка: {str(e)}'
+                    'message': f'Ошибка: {str(e), type(e)}'
                 }) + '\n'
 
         return Response(stream_with_context(generate()), mimetype='text/event-stream')
@@ -153,20 +163,33 @@ def send_query():
         form_data = request.form.to_dict()
         vacancy_name = form_data['vacancy_query']
         vacancy_template = form_data['vacancy_template']
-        vac_count = int(form_data['quantity'])
+        city_id = from_data['city']
+        vac_count = form_data['quantity']
+
+        if vac_count == 'all':  # Процерка на обработку всех вакансий
+            vacancy_count = min(2000, get_all_vacancy_count(vacancy_name))
+        else:
+            vacancy_count = min(2000, int(vac_count))
+
 
         keywords_list = load_requirements(vacancy_template)
-        vacancies = fetch_vacancies(vacancy_name, vac_count)
+        vacancies, status = fetch_vacancies(vacancy_name, city_id, vac_count)
+        if not status:
+            print('Error:')
+
+        vacancies_id_for_print = []
 
         counts = defaultdict(int)
         for vacancy in vacancies[:vac_count]:
             details = get_vacancy_details(vacancy['id'])
+            vacancies_id_for_print.append(vacancy['id'])
+
             if details:
                 text = parse_vacancy_details(details)
                 found = count_keywords(text, keywords_list)
                 for key in found:
                     counts[key] += 1
-
+        print(vacancies_id_for_print)
         grouped = process_results(counts)
         csv_path = save_results(vacancy_name, grouped,
                                 len(vacancies[:vac_count]))
@@ -183,6 +206,67 @@ def send_query():
 
     except Exception as e:
         return str(e), 500
+
+
+def fetch_vacancies(vacancy_name, area_id=1, vacancy_count=0):
+    """ Парсинг всех вакансий. """
+
+    # Огрраничения hh,ru API
+    MAX_PER_PAGE = 10
+    MAX_PAGE = 199
+    REQUEST_DELAY = 10
+    MAX_RETRIES = 3
+    # TIMEOUT = 10
+    MAX_TOTAL_PAGE = 2000
+
+    base_url = 'https://api.hh.ru/vacancies'
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    page = 0
+    retry_count = 0
+    processed_count = 0
+    vacancies = []
+    
+    while processed_count < vacancy_count:
+        try:
+            params = {
+                'text': vacancy_name,
+                'area': area_id,
+                'per_page': 50,
+                'page': page,
+                'only_with_salary': False  # Для получения большего количества результатов
+            }
+            response = requests.get(base_url, params=params, headers=headers)
+
+            if response.status_code != 200:
+                return None, False
+
+            data = response.json()
+            vacancies.extend(data['items'])
+
+            # Прерываем цикл, если достигли нужного количества или конца страниц
+            if vacancy_count and len(vacancies) >= vacancy_count:
+                vacancies = vacancies[:vacancy_count]
+                break
+
+            if page >= data['pages'] - 1:
+                break
+
+            delay = REQUEST_DELAY + uniform(8, 10)
+            time.sleep(delay)
+
+            page += 1
+            retry_count = 0
+
+        except (requests.exceptions.RequestException, ValueError) as e:
+            retry_count += 1
+            if retry_count >= MAX_RETRIES:
+                return None, False
+
+            wait_time = main(30, 2 ** retry_count) + uniform(0, 1)
+            time.sleep(wait_time)
+            continue
+
+    return vacancies, True
 
 
 def process_results(counts):
@@ -231,40 +315,6 @@ def load_requirements(vacancy_name):
     return keywords_list
 
 
-def fetch_vacancies(vacancy_name, vacancy_count=0) -> list:
-    """ Парсинг всех вакансий. """
-
-    base_url = 'https://api.hh.ru/vacancies'
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    page = 0
-    vacancies = []
-
-    while True:
-        params = {
-            'text': vacancy_name,
-            'per_page': 50,
-            'page': page
-        }
-        response = requests.get(base_url, params=params, headers=headers)
-
-        if response.status_code != 200:
-            break
-
-        data = response.json()
-        vacancies.extend(data['items'])
-
-        # Прерываем цикл, если достигли нужного количества или конца страниц
-        if vacancy_count and len(vacancies) >= vacancy_count:
-            vacancies = vacancies[:vacancy_count]  # Отсекаем лишние
-            break
-
-        if page >= data['pages'] - 1:
-            break
-
-        page += 1
-        time.sleep(0.5)
-
-    return vacancies
 
 
 def get_vacancy_details(vacancy_id) -> Optional[Dict[str, Any]]:

@@ -55,6 +55,11 @@ app.register_blueprint(work_with_analyzer_bp)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+@app.route('/')
+def redirect_to_main_page():
+    return redirect('/main')
+
+
 @app.route('/main')
 def get_main_page():
     return render_template('main_page.html')
