@@ -1,2 +1,11 @@
 # hhru-skill-extractor
-This Python project is designed to automatically extract and analyze popular requirements from a list of vacancies, allowing users to quickly identify key skills and competencies in demand in the labor market.
+
+![Скрин главной страницы](https://github.com/grigoriy-st/hhru-skill-extractor/docs/imgs/hhru-skill-extractor.png)
+
+## Описание
+
+Этот проект на Python предназначен для автоматического извлечения и 
+анализа популярных требований из списка вакансий, позволяя пользователям 
+быстро определять ключевые навыки и компетенции, востребованные на рынке труда.
+
+
