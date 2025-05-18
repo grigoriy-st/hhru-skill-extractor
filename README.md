@@ -1,6 +1,6 @@
 # hhru-skill-extractor
 
-![Скрин главной страницы](https://github.com/grigoriy-st/hhru-skill-extractor/docs/imgs/hhru-skill-extractor.png)
+![Скрин главной страницы](https://github.com/grigoriy-st/hhru-skill-extractor/blob/main/docs/imgs/hhru-skill-extractor.png)
 
 ## Описание
 
